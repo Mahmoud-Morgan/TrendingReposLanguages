@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\TrendingLanguagesResource;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -28,7 +29,7 @@ class TrendingReposController extends Controller
     public function trendingLanguages()
     {
         $groupedRepos =  $this->groupRepos('language',$this->response['items']);
-        dd($groupedRepos);
+        return TrendingLanguagesResource::collection($groupedRepos);
 
     }
 
