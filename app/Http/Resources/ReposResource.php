@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TrendingLanguagesResource extends JsonResource
+class ReposResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,9 +15,9 @@ class TrendingLanguagesResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'full_name' => $this['full_name'],
             'language' => $this['language'],
-            'number_of_repos' => $this['count'],
-            'repos_using_the_language' => ReposResource::collection($this['repos'])
+            'url' => $this['url']
         ];
     }
 }
