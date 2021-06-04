@@ -51,9 +51,15 @@ class TrendingReposController extends Controller
                 }
             }
         }
-        return $groupedRepos;
+        return $this->sortGroupedRepos($groupedRepos);
     }
 
+    private function sortGroupedRepos(array $groupedRepos)
+    {
+        $columns = array_column($groupedRepos, 'count');
+        array_multisort($columns, SORT_DESC,$groupedRepos);
+        return $groupedRepos;
+    }
 
 
 }
