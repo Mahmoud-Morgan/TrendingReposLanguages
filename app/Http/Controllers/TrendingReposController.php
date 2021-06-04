@@ -27,6 +27,33 @@ class TrendingReposController extends Controller
 
     public function trendingLanguages()
     {
-        return gettype($this->response['items']);
+        $groupedRepos =  $this->groupRepos('language',$this->response['items']);
+        dd($groupedRepos);
+
     }
+
+    private function groupRepos($key, $repos)
+    {
+        $groupedRepos = array();
+        foreach($repos as $repo) {
+            if(array_key_exists($key, $repo) && $repo[$key] != null){
+                $groupedReposKey = array_search($repo[$key], array_column($groupedRepos, $key));
+                // check condition by type ,to distinguish between "0 = false" and "0 -> index "
+                if(gettype($groupedReposKey) != "boolean"){
+                    $groupedRepos[$groupedReposKey]['count']++;
+                    $groupedRepos[$groupedReposKey]['repos'][]=$repo;
+                }else{
+                    $groupedRepos[]=[
+                        'language'=>$repo[$key],
+                        'count'=>1,
+                        'repos'=>[$repo]
+                    ];
+                }
+            }
+        }
+        return $groupedRepos;
+    }
+
+
+
 }
