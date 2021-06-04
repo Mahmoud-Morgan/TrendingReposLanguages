@@ -32,7 +32,7 @@ class TrendingReposController extends Controller
 
     }
 
-    private function groupRepos($key, $repos)
+    private function groupRepos($key, $repos):array
     {
         $groupedRepos = array();
         foreach($repos as $repo) {
@@ -54,7 +54,7 @@ class TrendingReposController extends Controller
         return $this->sortGroupedRepos($groupedRepos);
     }
 
-    private function sortGroupedRepos(array $groupedRepos)
+    private function sortGroupedRepos(array $groupedRepos):array
     {
         $columns = array_column($groupedRepos, 'count');
         array_multisort($columns, SORT_DESC,$groupedRepos);
