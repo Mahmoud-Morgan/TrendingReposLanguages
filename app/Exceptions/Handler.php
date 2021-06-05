@@ -3,6 +3,8 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -29,7 +31,7 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param  \Throwable  $exception
+     * @param \Throwable $exception
      * @return void
      *
      * @throws \Throwable
@@ -42,14 +44,31 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Throwable  $exception
+     * @param \Illuminate\Http\Request $request
+     * @param \Throwable $exception
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @throws \Throwable
      */
     public function render($request, Throwable $exception)
     {
+        if ($exception instanceof NotFoundHttpException) {
+            return response()->json(
+                [
+                    'data' => [],
+                    'message' => 'Route is not found',
+                    'success' => false
+                ], $exception->getStatusCode());
+        }
+        if ($exception instanceof ServiceUnavailableHttpException) {
+            return response()->json(
+                [
+                    'data' => [],
+                    'message' => 'dependency service is unavailable, '.$exception->getMessage(),
+                    'success' => false
+                ],$exception->getStatusCode());
+        }
+
         return parent::render($request, $exception);
     }
 }
